@@ -120,10 +120,10 @@ function checkForEndOfGame() {
         gameOver = true;
         dealerBust = true;
     } else if (gameOver) {
-        if (dealerScore > playerScore) {
-            playerWon = false;
-        } else {
+        if (playerScore > dealerScore) {
             playerWon = true;
+        } else {
+            playerWon = false;
         }
     }
 }
