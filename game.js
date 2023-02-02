@@ -146,10 +146,10 @@ function showStatus() {
 
     const dealerCardScore = document.getElementById("dealer-score");
 
-    if (!gameOver){
+    if (!gameOver) {
         dealerCardScore.innerText = `Dealer Score: ${dealerCards[0].getValue()}`;
     } else {
-        dealerCardScore.innerText = `Dealer Score: ${getScore(dealerCards)}`
+        dealerCardScore.innerText = `Dealer Score: ${getScore(dealerCards)}`;
     }
 
     for (let i = 0; i < dealerCards.length; i++) {
