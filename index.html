@@ -2,15 +2,22 @@
 <html>
     <head>
         <title>Blackjack</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+        <link rel="stylesheet" href="./assets/style/style.css" />
     </head>
     <body>
         <h1>Blackjack</h1>
-        <p>Click the button to start the game.</p>
         <button id="new-game-button">Start Game</button>
         <button id="hit-button">Hit</button>
-        <button id="stay-button">Stay</button>
-        <textarea id="text-area" style="resize: none; height: 30vh" readonly></textarea>
+        <button id="stay-button">Stand</button>
+        <textarea id="text-area" style="resize: none; height: 10vh" readonly></textarea>
+        <h1 class="center" id="player-header">Your cards</h1>
+        <div id="player-cards"></div>
+        <p class="center" id="player-score">Total Score: 0</p>
+        <h1 class="center" id="dealer-header">Dealer cards</h1>
+        <div id="dealer-cards"></div>
+        <p class="center" id="dealer-score">Total Score: 0</p>
         <script src="game.js"></script>
     </body>
 </html>

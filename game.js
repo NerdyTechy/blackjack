@@ -4,6 +4,8 @@ let values = ["Ace", "King", "Queen", "Jack", "Ten", "Nine", "Eight", "Seven", "
 var gameStarted = false;
 var gameOver = false;
 var playerWon = false;
+var playerBust = false;
+var dealerBust = false;
 var dealerCards = [];
 var playerCards = [];
 var dealerScore = 0;
@@ -14,10 +16,31 @@ var newGameButton = document.getElementById("new-game-button");
 var hitButton = document.getElementById("hit-button");
 var stayButton = document.getElementById("stay-button");
 
+class Card {
+    constructor(nameString, value, suit, asset) {
+        this.nameString = nameString;
+        this.value = value;
+        this.suit = suit;
+        this.asset = asset;
+    }
+    getNameString() {
+        return this.nameString;
+    }
+    getValue() {
+        return this.value;
+    }
+    getSuit() {
+        return this.suit;
+    }
+    getAsset() {
+        return this.asset;
+    }
+}
+
 function createDeck() {
     for (let suitIdx = 0; suitIdx < suits.length; suitIdx++) {
         for (let valueIdx = 0; valueIdx < values.length; valueIdx++) {
-            deck.push(values[valueIdx] + " of " + suits[suitIdx]);
+            deck.push(new Card(`${values[valueIdx]} of ${suits[suitIdx]}`, getCardNumericValue(`${values[valueIdx]} of ${suits[suitIdx]}`), suits[suitIdx], `./assets/images/${suits[suitIdx]}/${values[valueIdx]}.png`));
         }
     }
     return deck;
@@ -62,8 +85,8 @@ function getScore(cardArray) {
     let hasAce = false;
     for (let i = 0; i < cardArray.length; i++) {
         let card = cardArray[i];
-        score += getCardNumericValue(card);
-        if (card[0] === "A") {
+        score += getCardNumericValue(card.getNameString());
+        if (card.getNameString()[0] === "A") {
             hasAce = true;
         }
     }
@@ -91,9 +114,11 @@ function checkForEndOfGame() {
     if (playerScore > 21) {
         playerWon = false;
         gameOver = true;
+        playerBust = true;
     } else if (dealerScore > 21) {
         playerWon = true;
         gameOver = true;
+        dealerBust = true;
     } else if (gameOver) {
         if (dealerScore > playerScore) {
             playerWon = false;
@@ -108,29 +133,62 @@ function showStatus() {
         return (textArea.value = "Welcome to Blackjack!");
     }
 
-    let dealerCardString = "";
+    updateScores();
+
+    const dealerCardsDiv = document.getElementById("dealer-cards");
+    dealerCardsDiv.innerHTML = "";
+
+    const playerCardsDiv = document.getElementById("player-cards");
+    playerCardsDiv.innerHTML = "";
+
+    const playerCardScore = document.getElementById("player-score");
+    playerCardScore.innerText = `Your Score: ${playerScore}`;
+
+    const dealerCardScore = document.getElementById("dealer-score");
+
+    if (!gameOver){
+        dealerCardScore.innerText = `Dealer Score: ${dealerCards[0].getValue()}`;
+    } else {
+        dealerCardScore.innerText = `Dealer Score: ${getScore(dealerCards)}`
+    }
+
     for (let i = 0; i < dealerCards.length; i++) {
-        if (i == 0) {
-            dealerCardString += `• ${dealerCards[i]}\n`;
+        if (!gameOver) {
+            if (i == 0) {
+                const cardImage = document.createElement("img");
+                cardImage.src = dealerCards[i].getAsset();
+                cardImage.classList += "card";
+                dealerCardsDiv.appendChild(cardImage);
+            } else {
+                const cardImage = document.createElement("img");
+                cardImage.src = "./assets/images/Other/BlueBack.png";
+                cardImage.classList += "card";
+                dealerCardsDiv.appendChild(cardImage);
+            }
         } else {
-            dealerCardString += "• XXXXXXXXXXXX\n";
+            const cardImage = document.createElement("img");
+            cardImage.src = dealerCards[i].getAsset();
+            cardImage.classList += "card";
+            dealerCardsDiv.appendChild(cardImage);
         }
     }
 
-    let playerCardString = "";
     for (let i = 0; i < playerCards.length; i++) {
-        playerCardString += `• ${playerCards[i]}\n`;
+        const cardImage = document.createElement("img");
+        cardImage.src = playerCards[i].getAsset();
+        cardImage.classList += "card";
+        playerCardsDiv.appendChild(cardImage);
     }
-
-    updateScores();
-
-    textArea.value = "Dealer has:\n" + dealerCardString + `(score: ${getScore([dealerCards[0]])})\n\n` + "You have:\n" + playerCardString + "(score: " + playerScore + ")\n\n";
 
     if (gameOver) {
         if (playerWon) {
-            textArea.value = `You won!\n\nYour Score: ${playerScore}\nDealer Score: ${dealerScore}`;
+            textArea.value = `You won!${dealerBust ? " Dealer went bust!" : ""}`;
+            const playerHeader = document.getElementById("player-header");
+            playerHeader.innerText = "Your cards 👑";
         } else {
-            textArea.value = `Dealer won!\n\nYour Score: ${playerScore}\nDealer Score: ${dealerScore}`;
+            textArea.value = `Dealer won!${playerBust ? " You went bust!" : ""}`;
+            const playerHeader = document.getElementById("dealer-header");
+            playerHeader.innerText = "Dealer cards 👑";
         }
         newGameButton.style.display = "inline";
         hitButton.style.display = "none";
@@ -146,6 +204,15 @@ newGameButton.addEventListener("click", function () {
     gameStarted = true;
     gameOver = false;
     playerWon = false;
+    dealerBust = false;
+    playerBust = false;
+
+    const playerHeader = document.getElementById("player-header");
+    playerHeader.innerText = "Your cards";
+    const dealerHeader = document.getElementById("dealer-header");
+    dealerHeader.innerText = "Dealer cards";
+
+    textArea.value = "Get as close to 21 as possible without going over! Choose 'Hit' for another card, or 'Stand' to keep your current deck.";
 
     deck = createDeck();
     shuffleDeck(deck);
