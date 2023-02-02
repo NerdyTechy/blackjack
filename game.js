@@ -158,17 +158,20 @@ function showStatus() {
                 const cardImage = document.createElement("img");
                 cardImage.src = dealerCards[i].getAsset();
                 cardImage.classList += "card";
+                cardImage.draggable = false;
                 dealerCardsDiv.appendChild(cardImage);
             } else {
                 const cardImage = document.createElement("img");
                 cardImage.src = "./assets/images/Other/BlueBack.png";
                 cardImage.classList += "card";
+                cardImage.draggable = false;
                 dealerCardsDiv.appendChild(cardImage);
             }
         } else {
             const cardImage = document.createElement("img");
             cardImage.src = dealerCards[i].getAsset();
             cardImage.classList += "card";
+            cardImage.draggable = false;
             dealerCardsDiv.appendChild(cardImage);
         }
     }
@@ -177,6 +180,7 @@ function showStatus() {
         const cardImage = document.createElement("img");
         cardImage.src = playerCards[i].getAsset();
         cardImage.classList += "card";
+        cardImage.draggable = false;
         playerCardsDiv.appendChild(cardImage);
     }
 
