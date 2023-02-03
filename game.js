@@ -10,6 +10,7 @@ var dealerCards = [];
 var playerCards = [];
 var dealerScore = 0;
 var playerScore = 0;
+var balance = 100;
 
 var textArea = document.getElementById("text-area");
 var newGameButton = document.getElementById("new-game-button");
@@ -186,11 +187,16 @@ function showStatus() {
 
     if (gameOver) {
         if (playerWon) {
-            textArea.value = `You won!${dealerBust ? " Dealer went bust!" : ""}`;
+            balance *= 2;
+            balance = Math.round((balance + Number.EPSILON) * 100) / 100;
+            textArea.value = `You won!${dealerBust ? " Dealer went bust!" : ""} You currently have $${balance}.`;
             const playerHeader = document.getElementById("player-header");
             playerHeader.innerText = "Your cards 👑";
         } else {
-            textArea.value = `Dealer won!${playerBust ? " You went bust!" : ""}`;
+            balance /= 2;
+            balance = Math.round((balance + Number.EPSILON) * 100) / 100;
+            if (balance < 1) balance = 0;
+            textArea.value = `Dealer won!${playerBust ? " You went bust!" : ""} You currently have $${balance}.`;
             const playerHeader = document.getElementById("dealer-header");
             playerHeader.innerText = "Dealer cards 👑";
         }
@@ -213,10 +219,19 @@ newGameButton.addEventListener("click", function () {
 
     const playerHeader = document.getElementById("player-header");
     playerHeader.innerText = "Your cards";
+    playerHeader.style.display = "block";
+
     const dealerHeader = document.getElementById("dealer-header");
     dealerHeader.innerText = "Dealer cards";
+    dealerHeader.style.display = "block";
 
-    textArea.value = "Get as close to 21 as possible without going over! Choose 'Hit' for another card, or 'Stand' to keep your current deck.";
+    const playerScore = document.getElementById("player-score");
+    playerScore.style.display = "block";
+
+    const dealerScore = document.getElementById("dealer-score");
+    dealerScore.style.display = "block";
+
+    textArea.value = `You currently have $${balance}.`;
 
     deck = createDeck();
     shuffleDeck(deck);
