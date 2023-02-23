@@ -1,19 +1,26 @@
 {
-    "name": "consoleblackjack",
+    "name": "blackjack",
+    "private": true,
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "type": "module",
     "scripts": {
-        "test": "npx serve",
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
         "lint": "eslint . --ext .js",
         "lint:fix": "eslint . --ext .js --fix",
         "format": "prettier --write ."
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
     "devDependencies": {
-        "eslint": "^8.32.0",
-        "prettier": "^2.8.3"
+        "@types/react": "^18.0.27",
+        "@types/react-dom": "^18.0.10",
+        "@vitejs/plugin-react-swc": "^3.0.0",
+        "eslint": "^8.34.0",
+        "prettier": "^2.8.4",
+        "vite": "^4.1.0"
     }
 }
